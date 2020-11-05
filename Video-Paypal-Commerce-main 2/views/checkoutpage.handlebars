@@ -1,0 +1,96 @@
+<div class="cart">
+  checkout
+</div>
+
+<div id="cart-table">
+
+  <table>
+    <tbody id='table-of-orders'>
+
+    </tbody>
+  </table>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id={{clientId}}"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+
+</script>
+
+<script>
+  var cart = decodeURIComponent("{{{cart}}}")
+
+  cart = JSON.parse(cart)
+
+  const table = document.getElementById('cart-table');
+
+  var arr = Object.keys(cart).map((item) => {
+    const row = document.createElement('tr')
+    const price = document.createElement('td')
+    const name = document.createElement('td')
+    const qty = document.createElement('td')
+
+    price.innerHTML = " | " + cart[item].data.price
+    name.innerHTML = " | " + cart[item].data.name
+    qty.innerHTML = " | " + cart[item].count
+
+    row.appendChild(name)
+    row.appendChild(price)
+    row.appendChild(qty)
+
+    return row
+  })
+
+  console.log(cart)
+
+  arr.forEach(row => {
+    table.appendChild(row)
+  })
+
+
+
+  let total = 0
+
+  Object.keys(cart).forEach(key => {
+    total += cart[key].count * cart[key].data.price
+  })
+
+  //  paypal.Buttons().render('body');
+  paypal.Buttons({
+    createOrder: function (data, actions) {
+      // This function sets up the details of the transaction, including the amount and line item details.
+      return actions.order.create({
+        purchase_units: [{
+          description: 'Purchased Video',
+          amount: {
+            value: total
+          }
+        }]
+      });
+    },
+    onApprove: function (data, actions) {
+      // This function captures the funds from the transaction.
+      return actions.order.capture().then(async function (details) {
+        // This function shows a transaction success message to your buyer.
+        alert('Transaction completed by ' + details.payer.name.given_name + ". your video(s) will be emailed to you.");
+
+        console.log(details)
+
+        const vids = Object.keys(cart).map(key => {
+          return { id: key, qty: cart[key].count }
+        })
+
+        // sends the confirmed payment details to the server
+        await fetch('/purchase', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            payment_usd: total,
+            videos: vids,
+          })
+        })
+
+      });
+    }
+  }).render('body');
+</script>

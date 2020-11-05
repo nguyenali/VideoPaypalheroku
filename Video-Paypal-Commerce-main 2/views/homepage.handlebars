@@ -1,0 +1,81 @@
+<!-- "Concept" section-->
+<section id="what-we-do" class="intro">
+  <div class="flex-row">
+    <h2 class="section-title primary-border">Who we are </h2>
+  </div>
+  <div class="flex-row">
+    <P>
+      Add in brief description of our Website
+    </P>
+  </div>
+</section>
+
+
+
+<!-- "Videos" section-->
+<section id="videos-layout">
+
+  <div class="flex-row">
+    <h2 class="section-title primary-border">Videos</h2>
+  </div>
+
+  <div class="videos-layout">
+
+    <article class="video">
+      <div class="video-img">
+        <div>
+          <h3>Video 1</h3>
+          <h4>description</h4>
+          <button onclick="addToCart({id: 1, name: 'video 1', price: 10.99 })"> ADD TO CART </button>
+        </div>
+      </div>
+
+    </article>
+
+    <article class="video">
+      <div class="video-img">
+        <div>
+          <h3>Video 2</h3>
+          <h4>description</h4>
+          <button onclick="addToCart({id: 2, name: 'video 2', price: 15.99 })"> ADD TO CART </button>
+        </div>
+      </div>
+
+    </article>
+
+    <article class="video">
+      <div class="video-img">
+        <div id="paypal-button">
+          <h3>Video 3</h3>
+          <h4>description</h4>
+          <button onclick="addToCart({id: 3, name: 'video 3', price: 12.99 })"> ADD TO CART </button>
+        </div>
+      </div>
+
+    </article>
+  </div>
+
+
+</section>
+
+
+<button onclick="postCartToServer()">
+  CHECKOUT
+</button>
+{{!-- <script src="/scripts/cart.js"></script> --}}
+<script>
+  async function postCartToServer() {
+    var success = await fetch("/checkout", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ customerId: 1, cart: cartItems }),
+    }); 1
+    alert(1)
+
+    if (success) {
+      window.location.replace('/checkout/1')
+    }
+  }
+</script>

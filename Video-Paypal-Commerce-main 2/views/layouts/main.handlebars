@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{!-- <link rel="stylesheet" href="/css/style.css" /> --}}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eccomerce Website</title>
+</head>
+
+<body>
+  {{{body}}}
+</body>
+
+</html>
+
+<script src=""></script>
+
+<script>
+
+  const cartItems = {};
+
+  function addToCart(item) {
+    console.log("adding to cart...");
+    console.log(cartItems);
+
+    if (cartItems[item.id]) {
+      cartItems[item.id].count++;
+    } else {
+      cartItems[item.id] = {
+        count: 1,
+        data: item,
+      };
+    }
+  }
+
+  function removeFromCart(itemId) {
+    if (cartItems[itemId]) {
+      if (cartItems[itemId] > 0) {
+        cartItems[itemId].count--;
+      } else {
+        delete cartItems[itemId];
+      }
+    }
+  }
+</script>
